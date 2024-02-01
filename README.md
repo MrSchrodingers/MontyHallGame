@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# MontyHall Game
 
-First, run the development server:
+Bem-vindo ao MontyHall Game, uma aplicação descontraída e cheia de surpresas, baseada no famoso problema de Monty Hall! Aqui, você terá a oportunidade de testar suas habilidades de escolha e estratégia enquanto se diverte.
 
+# Tecnologias Utilizadas
+
+* <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css" height="12" width="12"/> __Next.js__: Utilizamos o Next.js como framework principal para facilitar o desenvolvimento de aplicações React, tornando a construção de páginas e o roteamento uma tarefa mais fácil e eficiente.
+
+* <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="12" width="12"/> __React__: A base do MontyHall Game é construída com React, proporcionando uma experiência de desenvolvimento modular e reativa.
+
+* <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/threejs/threejs-original.svg" height="12" width="12"/> __React Three Fiber__ e __Drei__: Incorporamos React Three Fiber e Drei para criar incríveis gráficos 3D diretamente em componentes React, adicionando um toque visual impressionante ao jogo.
+
+* __Framer Motion__: Utilizamos Framer Motion para adicionar animações suaves e interações elegantes, tornando a experiência do usuário mais envolvente.
+
+* <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg" height="12" width="12"/> __Tailwind CSS__: Estilizamos nossa aplicação com Tailwind CSS, uma ferramenta incrível para criar designs bonitos e responsivos de forma rápida e eficiente.
+
+# Como Rodar o Projeto
+Siga estes simples passos para rodar o MontyHall Game em sua máquina:
+
+Clone o Repositório:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/MrSchrodingers/montyhall-game.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Instale as Dependências:
+```bash
+cd montyhall-game
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Inicie o Servidor de Desenvolvimento:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Acesse a Aplicação:
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Abra seu navegador e acesse http://localhost:3000 para começar a se divertir com o MontyHall Game!
+Lembre-se, escolha com sabedoria e divirta-se explorando as probabilidades desse intrigante desafio! 🚪✨
