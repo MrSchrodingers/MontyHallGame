@@ -1,25 +1,56 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/jsx-no-undef */
 /* eslint-disable react/no-unknown-property */
 'use client';
 
+import React, { useEffect, useState } from 'react';
 import { Suspense, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
+import { AnimationMixer, AnimationClip, LoopOnce } from 'three';
 
-const Model: React.FC = () => {
-  const gltf = useGLTF('/spot_light.glb');
-  const modelRef = useRef(gltf.scene);
-  
-  if (modelRef.current) {
-    modelRef.current.position.set(0, -0.5, 4);
-    modelRef.current.rotation.y = - Math.PI / 6;
-    modelRef.current.rotation.x =  Math.PI / 8;
+const SpotLightModel: React.FC = () => {
+  const [playAnimation, setPlayAnimation] = useState(false);
+
+  const handleClick = () => {
+    setPlayAnimation(true);
+  };
+
+  const gltf = useGLTF('/spot_lightAnim.glb');
+  const modelRef = useRef<any>();
+  const mixer = useRef<AnimationMixer>();
+
+  gltf.scene.position.set(0,0,4);
+
+  if (modelRef.current && !mixer.current) {
+    mixer.current = new AnimationMixer(modelRef.current);
+
+    if (gltf.animations.length > 0) {
+      const clip = AnimationClip.findByName(gltf.animations, 'spotMotion');
+      if (clip && playAnimation) {
+        const action = mixer.current.clipAction(clip);
+        action.setLoop(LoopOnce, 0);
+        action.clampWhenFinished = true;
+        action.enabled = true;
+        action.reset().play();
+      }
+    }
   }
 
+  useFrame((_, delta) => {
+    if (mixer.current) {
+      mixer.current.update(delta);
+    }
+  });
+
+  useEffect(() => {
+    handleClick();
+  }, []);
+
   return (
-    <>
-      <primitive object={gltf.scene} ref={modelRef}/>
-    </>
+    <group>
+      <primitive object={gltf.scene} ref={modelRef} scale={0.8}/>
+    </group>
   );
 };
 
@@ -37,9 +68,8 @@ export default function Model3D() {
         shadow-camera-top={30}
       />
       <Suspense fallback={null}>
-        <Model />
+        <SpotLightModel />
       </Suspense>
-      {/* <OrbitControls onPointerMove={}/> */}
     </Canvas>
   );
 }
