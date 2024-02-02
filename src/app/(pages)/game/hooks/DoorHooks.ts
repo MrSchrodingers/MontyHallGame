@@ -1,7 +1,7 @@
 'use client';
 import { DoorModel } from '@/app/model/DoorModel';
 import { OpenDoorContext } from '@/app/shared/context';
-import { useContext, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 export const useDoorHooks = () => {
   const { playAnimation } = useContext(OpenDoorContext);
@@ -17,17 +17,44 @@ export const useDoorHooks = () => {
   }
 
   
-  const [doors] = useState<DoorModel[]>(() => {
+  const [doors, setDoors] = useState<DoorModel[]>(() => {
 
     const doorsGen: DoorModel[] = havePresentArray.map((havePresent, index) => {
-      return new DoorModel(index + 1, havePresent, false);
+      return new DoorModel(index + 1, havePresent, false, false);
     });
     return doorsGen;
   });
 
+  const handleDoor = useCallback(
+    (doorNumber: number) => {
+      setDoors((prevDoors) =>
+        prevDoors.map((prevDoor) =>
+          prevDoor.doorNumber === doorNumber
+            ? new DoorModel(prevDoor.doorNumber, prevDoor.havePresent, !prevDoor.openStatus, prevDoor.selected)
+            : prevDoor
+        )
+      );
+    },
+    [setDoors]
+  );
+
+  const handleSelected = useCallback(
+    (doorNumber: number) => {
+      setDoors((prevDoors) =>
+        prevDoors.map((prevDoor) =>
+          prevDoor.doorNumber === doorNumber
+            ? new DoorModel(prevDoor.doorNumber, prevDoor.havePresent, prevDoor.openStatus, !prevDoor.selected)
+            : prevDoor
+        )
+      );
+    },
+    [setDoors]
+  );
   return {
     doors, 
     playAnimation,
-    numberOfDoors
+    numberOfDoors,
+    handleDoor,
+    handleSelected
   };
 };

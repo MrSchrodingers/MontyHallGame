@@ -1,10 +1,9 @@
 'use client';
-
 import * as THREE from 'three';
-import React, { useContext, useEffect, useRef } from 'react';
-import { useGLTF, useAnimations } from '@react-three/drei';
+import React, { useCallback, useRef } from 'react';
+import { useGLTF, useAnimations, SpotLight } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
-import { OpenDoorContext } from '@/app/shared/context';
+import { IDoorProps } from '@/app/model';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -28,9 +27,12 @@ interface MyGLTFResult extends GLTFResult {
   animations: GLTFAction[];
 }
 
-export function Door3DModel(props: JSX.IntrinsicElements['group']) {
-  const { playAnimation, setPlayAnimation } = useContext(OpenDoorContext);
-  
+interface Door3DModelProps extends IDoorProps {
+  onClick: () => void;
+  onClickSelected: () => void;
+}
+
+export const Door3DModel: React.FC<Door3DModelProps> = ({ openStatus, onClick, onClickSelected, selected }) => {  
   const { nodes, materials, animations } = useGLTF(
     '/door/doorAnimMod.glb'
   ) as MyGLTFResult;
@@ -38,12 +40,15 @@ export function Door3DModel(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>(null);
   const { actions } = useAnimations(animations, group);
 
-  const clickHandler = () => {
-    setPlayAnimation((prevState) => !prevState);
+  const clickHandler = useCallback(() => {
     actions.DoorAction!.clampWhenFinished = true;
-    playAnimation ? (actions.DoorAction!.timeScale = 1) : (actions.DoorAction!.timeScale = -1);
     actions.DoorAction!.reset().play().setLoop(THREE.LoopOnce, 1);
-  };
+    onClick();
+  }, [openStatus]);
+
+  const selectHandler = useCallback(() => {
+    onClickSelected();
+  }, [openStatus]);
 
 
   const renderer = new THREE.WebGLRenderer({
@@ -55,24 +60,34 @@ export function Door3DModel(props: JSX.IntrinsicElements['group']) {
   renderer.toneMappingExposure = 1;
 
   return (
-    <group ref={group} {...props} dispose={null} position={[0,0,1]}>
+    <group ref={group} dispose={null} position={[0,0,1]}>
       <group name="Scene">
-        <group name="Door_Group" onClick={clickHandler} >
-          <mesh
+        <group name="Door_Group" >
+          {selected ? 
+            <SpotLight 
+              angle={0.5}
+              position={[0,2.3,1.5]}
+              intensity={10}
+              decay={3.3}
+            /> : null}
+          <mesh onClick={selectHandler}
             name="DoorFrame"
             castShadow
             receiveShadow
             geometry={nodes.DoorFrame.geometry}
             material={materials.Door_material}
           >
-            <mesh
-              name="Door"
-              castShadow
-              receiveShadow
-              geometry={nodes.Door.geometry}
-              material={materials.Door_material}
-              position={[0.41800001, 1.04999995, 0.0221]}
-              rotation={[0, 0.22846294, 0]}
+            <mesh onClick={(e) => {
+              e.stopPropagation(); // Impede a propagação do evento para elementos pai
+              clickHandler();
+            }}
+            name="Door"
+            castShadow
+            receiveShadow
+            geometry={nodes.Door.geometry}
+            material={materials.Door_material}
+            position={[0.41800001, 1.04999995, 0.0221]}
+            rotation={[0, 0.22846294, 0]}
             >
               <mesh
                 name="Handle_Back"
@@ -97,6 +112,6 @@ export function Door3DModel(props: JSX.IntrinsicElements['group']) {
       </group>
     </group>
   );
-}
+};
 
 useGLTF.preload('/door/doorAnimMod.glb');

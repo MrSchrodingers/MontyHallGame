@@ -1,8 +1,8 @@
-
-import * as THREE from 'three';
+// Trophy3DModel.tsx
 import React, { useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
+import { Sparkles, useGLTF } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
+import { IDoorProps } from '@/app/model';
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -13,24 +13,30 @@ type GLTFResult = GLTF & {
   };
 };
 
-export function Trophy3DModel(props: JSX.IntrinsicElements['group']) {
+interface ITrophy3DModelProps extends IDoorProps {
+  presentFound: boolean,
+}
+
+export const Trophy3DModel: React.FC<Omit<ITrophy3DModelProps, 'doorNumber' | 'havePresent' | 'selected' >> = ({ presentFound }) => {
   const { nodes, materials } = useGLTF('/door/trophy.glb') as GLTFResult;
   const groupRef = useRef(null);
+
   return (
-    <group {...props} dispose={null} ref={groupRef}>
+    <group dispose={null} ref={groupRef}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Object_2.geometry}
           material={materials['Scene_-_Root']}
-          position={[0.702, 0, 0]}
+          position={[1.4, 0, 0]}
           rotation={[0, 0, -Math.PI / 2]}
-          scale={0.01}
+          scale={0.02}
         />
+        {presentFound ? <Sparkles size={20} count={15} scale={[0.4,2,-2]} position={[0,15,2.5]}/> : null}
       </group>
     </group>
   );
-}
+};
 
 useGLTF.preload('/door/trophy.glb');

@@ -2,6 +2,7 @@
 'use client';
 import { OpenDoorContextProvider } from '@/app/shared/context';
 import { DoorModel3DComponent } from './components/doorComponent';
+import { TrophyContextProvider } from '@/app/shared/context/TrophyContext';
 
 
 export default function Game () {
@@ -10,7 +11,9 @@ export default function Game () {
     <main className='w-full h-screen bg-slate-400'>
       <div className='w-full h-screen'>
         <OpenDoorContextProvider>
-          <DoorModel3DComponent />
+          <TrophyContextProvider>
+            <DoorModel3DComponent />
+          </TrophyContextProvider>
         </OpenDoorContextProvider>
       </div>
     </main>
