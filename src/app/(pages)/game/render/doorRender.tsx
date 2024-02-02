@@ -1,48 +1,92 @@
 'use client';
-import React, { useState } from 'react';
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
-import { AnimationMixer, AnimationClip, LoopOnce } from 'three';
 
+import * as THREE from 'three';
+import React, { useContext, useRef } from 'react';
+import { useGLTF, useAnimations } from '@react-three/drei';
+import { GLTF } from 'three-stdlib';
+import { OpenDoorContext } from '@/app/shared/context';
 
-export const Door3DModel: React.FC = () => {
-  const [playAnimation, setPlayAnimation] = useState(false);
+type GLTFResult = GLTF & {
+  nodes: {
+    DoorFrame: THREE.Mesh;
+    Door: THREE.Mesh;
+    Handle_Back: THREE.Mesh;
+    Handle_Front: THREE.Mesh;
+  };
+  materials: {
+    Door_material: THREE.MeshStandardMaterial;
+    Handle_material: THREE.MeshStandardMaterial;
+  };
+};
 
-  const handleClick = () => {
+type ActionName = 'DoorAction';
+
+interface GLTFAction extends THREE.AnimationClip {
+  name: ActionName;
+}
+interface MyGLTFResult extends GLTFResult {
+  animations: GLTFAction[];
+}
+
+export function Door3DModel(props: JSX.IntrinsicElements['group']) {
+  const { playAnimation, setPlayAnimation } = useContext(OpenDoorContext);
+  
+  const { nodes, materials, animations } = useGLTF(
+    '/door/doorAnimMod.glb'
+  ) as MyGLTFResult;
+
+  const group = useRef<THREE.Group>(null);
+  const { actions } = useAnimations(animations, group);
+
+  const clickHandler = () => {
     setPlayAnimation(true);
+    actions.DoorAction!.clampWhenFinished = true;
+    actions.DoorAction!.reset().play().setLoop(THREE.LoopOnce, 1);
   };
 
-  const gltf = useGLTF('/door/doorAnimMod.glb');
-  const modelRef = useRef<any>();
-  const mixer = useRef<AnimationMixer>();
-
-  gltf.scene.position.set(0, 0, 1);
-
-  if (modelRef.current && !mixer.current) {
-    mixer.current = new AnimationMixer(modelRef.current);
-
-    if (gltf.animations.length > 0) {
-      const clip = AnimationClip.findByName(gltf.animations, 'DoorAction');
-      if (clip && playAnimation) {
-        const action = mixer.current.clipAction(clip);
-        action.setLoop(LoopOnce, 0);
-        action.clampWhenFinished = true;
-        action.enabled = true;
-        action.reset().play();
-      }
-    }
-  }
-
-  useFrame((_, delta) => {
-    if (mixer.current) {
-      mixer.current.update(delta);
-    }
-  });
-
   return (
-    <group onClick={handleClick}>
-      <primitive object={gltf.scene} ref={modelRef} />
+    <group ref={group} {...props} dispose={null} position={[0,0,1]}>
+      <group name="Scene">
+        <group name="Door_Group" onClick={clickHandler}>
+          <mesh
+            name="DoorFrame"
+            castShadow
+            receiveShadow
+            geometry={nodes.DoorFrame.geometry}
+            material={materials.Door_material}
+          >
+            <mesh
+              name="Door"
+              castShadow
+              receiveShadow
+              geometry={nodes.Door.geometry}
+              material={materials.Door_material}
+              position={[0.41800001, 1.04999995, 0.0221]}
+              rotation={[0, 0.22846294, 0]}
+            >
+              <mesh
+                name="Handle_Back"
+                castShadow
+                receiveShadow
+                geometry={nodes.Handle_Back.geometry}
+                material={materials.Handle_material}
+                position={[-0.76400006, 0, -0.005]}
+              />
+              <mesh
+                name="Handle_Front"
+                castShadow
+                receiveShadow
+                geometry={nodes.Handle_Front.geometry}
+                material={materials.Handle_material}
+                position={[-0.764, 0, -0.02899999]}
+                rotation={[-Math.PI, 0, 0]}
+              />
+            </mesh>
+          </mesh>
+        </group>
+      </group>
     </group>
   );
-};
+}
+
+useGLTF.preload('/door/doorAnimMod.glb');

@@ -1,8 +1,10 @@
 'use client';
 import { DoorModel } from '@/app/model/DoorModel';
-import { useState } from 'react';
+import { OpenDoorContext } from '@/app/shared/context';
+import { useContext, useState } from 'react';
 
 export const useDoorHooks = () => {
+  const { playAnimation } = useContext(OpenDoorContext);
 
   const numberOfDoors = 3;
   const presentIndex = Math.floor(Math.random() * numberOfDoors);
@@ -16,18 +18,16 @@ export const useDoorHooks = () => {
 
   
   const [doors] = useState<DoorModel[]>(() => {
+
     const doorsGen: DoorModel[] = havePresentArray.map((havePresent, index) => {
       return new DoorModel(index + 1, havePresent, false);
     });
     return doorsGen;
   });
 
-  const handleDoorClick = () => {
-    console.log('Porta clicada!');
-  };
-
   return {
-    doors,
-    handleDoorClick,
+    doors, 
+    playAnimation,
+    numberOfDoors
   };
 };

@@ -12,3 +12,4 @@ export const Trophy3DModel: React.FC = () => {
     </group>
   );
 };
+

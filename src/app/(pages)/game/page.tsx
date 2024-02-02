@@ -1,18 +1,17 @@
+/* eslint-disable react/jsx-key */
 'use client';
-import {DoorModel3D} from './components/doorComponent';
-import { DoorProvider } from './context/DoorContext';
-import { useDoorHooks } from './hooks';
+import { OpenDoorContextProvider } from '@/app/shared/context';
+import { DoorModel3DComponent } from './components/doorComponent';
 
 
 export default function Game () {
-  const {doors, handleDoorClick} = useDoorHooks();
 
   return (
     <main className='w-full h-screen bg-slate-400'>
       <div className='w-full h-screen'>
-        <DoorProvider>
-          <DoorModel3D />
-        </DoorProvider>
+        <OpenDoorContextProvider>
+          <DoorModel3DComponent />
+        </OpenDoorContextProvider>
       </div>
     </main>
   );
