@@ -1,7 +1,7 @@
 'use client';
 
 import * as THREE from 'three';
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTF } from 'three-stdlib';
 import { OpenDoorContext } from '@/app/shared/context';
@@ -39,15 +39,25 @@ export function Door3DModel(props: JSX.IntrinsicElements['group']) {
   const { actions } = useAnimations(animations, group);
 
   const clickHandler = () => {
-    setPlayAnimation(true);
+    setPlayAnimation((prevState) => !prevState);
     actions.DoorAction!.clampWhenFinished = true;
+    playAnimation ? (actions.DoorAction!.timeScale = 1) : (actions.DoorAction!.timeScale = -1);
     actions.DoorAction!.reset().play().setLoop(THREE.LoopOnce, 1);
   };
+
+
+  const renderer = new THREE.WebGLRenderer({
+    antialias: true,
+  });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1;
 
   return (
     <group ref={group} {...props} dispose={null} position={[0,0,1]}>
       <group name="Scene">
-        <group name="Door_Group" onClick={clickHandler}>
+        <group name="Door_Group" onClick={clickHandler} >
           <mesh
             name="DoorFrame"
             castShadow
