@@ -8,7 +8,7 @@ import { TrophyContextProvider } from '@/app/shared/context/TrophyContext';
 export default function Game () {
 
   return (
-    <main className='w-full h-screen bg-slate-400'>
+    <main className='w-full h-screen bg-slate-800'>
       <div className='w-full h-screen'>
         <OpenDoorContextProvider>
           <TrophyContextProvider>

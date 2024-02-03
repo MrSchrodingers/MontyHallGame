@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-undef */
+'use client';
 import { ContentComponent, HomeComponents } from './components';
 import { InfoComponent } from './components/InfoContent';
 
@@ -6,13 +6,13 @@ import { InfoComponent } from './components/InfoContent';
 
 export default function Home( ) {
   return (
-    <main className="h-full min-h-screen bg-slate-500">
-      <div className='min-h-screen'>
+    <main className="h-full min-h-screen-lg bg-slate-800">
+      <div className='overflow-hidden max-h-screen h-full'>
         <div className="h-8 flex rounded-lg bg-zinc-900/2 p-6 mx-4 items-center justify-between">
           <HomeComponents />
         </div>
         <section 
-          className="w-full min-h-screen flex flex-col justify-between lg:pb-[110px] items-end"
+          className="overflow-hidden w-full h-full flex flex-col"
           id='ContentSection'
         >
           <ContentComponent />    
@@ -20,7 +20,7 @@ export default function Home( ) {
       </div>
       
       <section 
-        className="w-full lg:h-[755px] flex flex-col justify-between py-32 lg:pb-[110px] items-en"
+        className="overflow-hidden w-full  min-h-screen flex flex-col justify-between py-32 items-center "
         id='InformationSection'
       >
         <InfoComponent />    
