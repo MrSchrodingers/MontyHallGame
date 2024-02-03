@@ -6,7 +6,7 @@ import { InfoComponent } from './components/InfoContent';
 
 export default function Home( ) {
   return (
-    <main className="h-full min-h-screen-lg bg-slate-800">
+    <main className="h-full min-h-screen-lg bg-slate-800 font-mono">
       <div className='overflow-hidden max-h-screen h-full'>
         <div className="h-8 flex rounded-lg bg-zinc-900/2 p-6 mx-4 items-center justify-between">
           <HomeComponents />
