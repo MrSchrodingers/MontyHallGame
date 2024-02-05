@@ -17,7 +17,7 @@ interface ITrophy3DModelProps extends IDoorProps {
   presentFound: boolean,
 }
 
-export const Trophy3DModel: React.FC<Omit<ITrophy3DModelProps, 'doorNumber' | 'havePresent' | 'selected' >> = ({ presentFound }) => {
+const Trophy3DModel: React.FC<Omit<ITrophy3DModelProps, 'doorNumber' | 'havePresent' | 'selected' >> = ({ presentFound }) => {
   const { nodes, materials } = useGLTF('/door/trophy.glb') as GLTFResult;
   const groupRef = useRef(null);
 
@@ -40,3 +40,4 @@ export const Trophy3DModel: React.FC<Omit<ITrophy3DModelProps, 'doorNumber' | 'h
 };
 
 useGLTF.preload('/door/trophy.glb');
+export default Trophy3DModel;

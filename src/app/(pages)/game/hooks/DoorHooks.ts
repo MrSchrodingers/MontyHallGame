@@ -1,29 +1,36 @@
 'use client';
+
 import { DoorModel } from '@/app/model/DoorModel';
-import { OpenDoorContext } from '@/app/shared/context';
 import { useCallback, useContext, useState } from 'react';
+import { SelectedDoorContext } from '@/app/shared/context';
 
 export const useDoorHooks = () => {
-  const { playAnimation } = useContext(OpenDoorContext);
-
+  const { selectedDoorNumber } = useContext(SelectedDoorContext);
   const numberOfDoors = 3;
-  const presentIndex = Math.floor(Math.random() * numberOfDoors);
 
-  const havePresentArray: boolean[] = Array.from({ length: numberOfDoors }, (_, index) => index === presentIndex);
+  const generateRandomPresentIndex = () => {
+    return Math.floor(Math.random() * numberOfDoors);
+  };
 
-  if (!havePresentArray.includes(true)) {
-    const randomIndex = Math.floor(Math.random() * numberOfDoors);
-    havePresentArray[randomIndex] = true;
-  }
+  const generateRandomDoorArray = () => {
+    const presentIndex = generateRandomPresentIndex();
+    const havePresentArray: boolean[] = Array.from({ length: numberOfDoors }, (_, index) => index === presentIndex);
 
+    if (!havePresentArray.includes(true)) {
+      const randomIndex = generateRandomPresentIndex();
+      havePresentArray[randomIndex] = true;
+    }
+
+    return havePresentArray;
+  };
+
+  const generateInitialDoors = () => {
+    const havePresentArray = generateRandomDoorArray();
+    return havePresentArray.map((havePresent, index) => new DoorModel(index + 1, havePresent, false, false));
+  };
+
+  const [doors, setDoors] = useState<DoorModel[]>(generateInitialDoors);
   
-  const [doors, setDoors] = useState<DoorModel[]>(() => {
-
-    const doorsGen: DoorModel[] = havePresentArray.map((havePresent, index) => {
-      return new DoorModel(index + 1, havePresent, false, false);
-    });
-    return doorsGen;
-  });
 
   const handleDoor = useCallback(
     (doorNumber: number) => {
@@ -35,7 +42,7 @@ export const useDoorHooks = () => {
         )
       );
     },
-    [setDoors]
+    [setDoors, selectedDoorNumber]
   );
 
   const handleSelected = useCallback(
@@ -44,15 +51,15 @@ export const useDoorHooks = () => {
         prevDoors.map((prevDoor) =>
           prevDoor.doorNumber === doorNumber
             ? new DoorModel(prevDoor.doorNumber, prevDoor.havePresent, prevDoor.openStatus, !prevDoor.selected)
-            : prevDoor
+            : new DoorModel(prevDoor.doorNumber, prevDoor.havePresent, prevDoor.openStatus, false)
         )
       );
     },
     [setDoors]
   );
+
   return {
-    doors, 
-    playAnimation,
+    doors,
     numberOfDoors,
     handleDoor,
     handleSelected

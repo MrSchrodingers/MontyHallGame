@@ -38,7 +38,7 @@ interface MyGLTFResult extends GLTFResult {
 }
 
 
-export const SpotLight3DModel: React.FC = () => {
+const SpotLight3DModel: React.FC = () => {
   const { nodes, materials, animations } = useGLTF(
     '/Spotlight/spotlight.glb'
   ) as MyGLTFResult;
@@ -275,3 +275,4 @@ export const SpotLight3DModel: React.FC = () => {
 };
 
 useGLTF.preload('/Spotlight/spotlight.glb');
+export default SpotLight3DModel;

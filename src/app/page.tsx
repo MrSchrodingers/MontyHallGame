@@ -2,8 +2,6 @@
 import { ContentComponent, HomeComponents } from './components';
 import { InfoComponent } from './components/InfoContent';
 
-
-
 export default function Home( ) {
   return (
     <main className="h-full min-h-screen-lg bg-slate-800 font-mono">

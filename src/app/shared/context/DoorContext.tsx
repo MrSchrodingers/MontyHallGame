@@ -1,21 +1,21 @@
 import React, { ReactNode, createContext, useState } from 'react';
 
-interface IOpenDoorContextData {
-  playAnimation: boolean;
-  setPlayAnimation: React.Dispatch<React.SetStateAction<boolean>>;
+interface ISelectedContextData {
+  selectedDoorNumber: number | null;
+  setSelectedDoorNumber: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-interface IOpenDoorProviderProps{
+interface ISelectedProviderProps{
   children: ReactNode
 }
-export const OpenDoorContext = createContext<IOpenDoorContextData>({} as IOpenDoorContextData);
+export const SelectedDoorContext = createContext<ISelectedContextData>({} as ISelectedContextData);
 
-export const OpenDoorContextProvider: React.FC<IOpenDoorProviderProps> = ({ children }) => {
-  const [playAnimation, setPlayAnimation] = useState(false);
+export const SelectedDoorContextProvider: React.FC<ISelectedProviderProps> = ({ children }) => {
+  const [selectedDoorNumber, setSelectedDoorNumber] = useState<number | null>(null);
 
   return (
-    <OpenDoorContext.Provider value={{playAnimation, setPlayAnimation}}>
+    <SelectedDoorContext.Provider value={{ selectedDoorNumber, setSelectedDoorNumber }}>
       {children}
-    </OpenDoorContext.Provider>
+    </SelectedDoorContext.Provider>
   );
 };

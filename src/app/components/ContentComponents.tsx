@@ -1,11 +1,13 @@
 'use client';
 
-import {SpotLight3DModel} from './Model3D';
 import { motion } from 'framer-motion';
 import { Stars } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
+import { lazy } from 'react';
 
 export const ContentComponent: React.FC = () => {
+  const SpotLight3DModel = lazy(() => import('./Model3D'));
+
   return (
     <div className="relative w-full h-screen-vh min-h-screen">
       <div className="absolute w-full h-full z-0">
